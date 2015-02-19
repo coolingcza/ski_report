@@ -1,0 +1,162 @@
+
+<table>
+<% @resorts.each do |r| %>
+  <tr>
+    <td>
+      <%= r.name %>
+    </td>
+    <td align="center">
+      <b><%= r.name[0..0] %></b>
+    </td>
+  </tr>
+<% end %>
+</table>
+
+<hr>
+
+<table width="1100" height="100%">
+
+<tr align="center">
+  
+  <td>
+  </td>
+  <td>
+    Today
+  </td>
+  <td>
+    Tomorrow
+  </td>
+  <td>
+    Day 2
+  </td>
+  <td>
+    Day 3
+  </td>
+  
+</tr>
+
+<tr>
+
+  <td>
+    <b>Precip Probability</b><br>
+    <table>
+      <tr>
+        <td style="width:15px;background-color:#<%= "#{@markers[7].description}" %>"></td>
+        <td>0%</td>
+      </tr>
+      <tr>
+        <td style="width:15px;background-color:#<%= "#{@markers[8].description}" %>"></td>
+        <td>.01%-50%</td>
+      </tr>
+      <tr>
+        <td style="width:15px;background-color:#<%= "#{@markers[9].description}" %>"></td>
+        <td>51%-75%</td>
+      </tr>
+      <tr>
+        <td style="width:15px;background-color:#<%= "#{@markers[10].description}" %>"></td>
+        <td>76%-100%</td>
+      </tr>
+    </table>
+  </td>
+  <td>
+  <img src=<%= @map_strings["0"]["prob"] %> />
+  </td>
+  <td>
+  <img src=<%= @map_strings["1"]["prob"] %> />
+  </td>
+  <td>
+  <img src=<%= @map_strings["2"]["prob"] %> />
+  </td>
+  <td>
+  <img src=<%= @map_strings["3"]["prob"] %> />
+  </td>
+
+</tr>
+
+<tr>
+
+  <td>
+    <b>Precip Type</b><br>
+    <table>
+      <tr>
+        <td style="width:15px;background-color:#<%= "#{@markers[2].description}" %>"></td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td style="width:15px;background-color:#<%= "#{@markers[1].description}" %>"></td>
+        <td>Rain</td>
+      </tr>
+      <tr>
+        <td style="width:15px;background-color:#<%= "#{@markers[11].description}" %>"></td>
+        <td>Sleet</td>
+      </tr>
+      <tr>
+        <td style="width:15px;background-color:#<%= "#{@markers[0].description}" %>"></td>
+        <td>Snow</td>
+      </tr>
+
+    </table>
+  </td>
+  <td>
+  <img src=<%= @map_strings["0"]["type"] %> />
+  </td>
+  <td>
+  <img src=<%= @map_strings["1"]["type"] %> />
+  </td>
+  <td>
+  <img src=<%= @map_strings["2"]["type"] %> />
+  </td>
+  <td>
+  <img src=<%= @map_strings["3"]["type"] %> />
+  </td>
+
+</tr>
+
+<tr>
+
+  <td>
+    <b>Precip Accumulation</b><br>
+    <table>
+      <tr>
+        <td style="width:15px;background-color:#<%= "#{@markers[3].description}" %>"></td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td style="width:15px;background-color:#<%= "#{@markers[4].description}" %>"></td>
+        <td>Up to 2 in.</td>
+      </tr>
+      <tr>
+        <td style="width:15px;background-color:#<%= "#{@markers[5].description}" %>"></td>
+        <td>2 to 6 in.</td>
+      </tr>
+      <tr>
+        <td style="width:15px;background-color:#<%= "#{@markers[6].description}" %>"></td>
+        <td>More than 6 in.</td>
+      </tr>
+    </table>
+  </td>
+  <td>
+  <img src=<%= @map_strings["0"]["accum"] %> />
+  </td>
+  <td>
+  <img src=<%= @map_strings["1"]["accum"] %> />
+  </td>
+  <td>
+  <img src=<%= @map_strings["2"]["accum"] %> />
+  </td>
+  <td>
+  <img src=<%= @map_strings["3"]["accum"] %> />
+  </td>
+
+</tr>
+
+</table>
+
+<form action="/change_resorts" method="get">
+  <input type="hidden" name="username" value=<%= @username %>>
+  <input type="submit" value="Change Resorts">
+</form>
+
+<hr>
+<% #javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+<% #line_chart @temp_min_chart %>

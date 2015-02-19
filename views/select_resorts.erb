@@ -1,0 +1,45 @@
+<h2><%= @var_text %></h2>
+
+<% if !@state %>
+
+<h3>Select State:</h3>
+
+<form action="<%= @path %>" method="get">
+    <select name="state">
+    <% @state_list.each do |s| %>
+      <option value= <%= s %> > <%= s %> </option>
+    <% end %>
+    </select>
+    <input type="hidden" name="username" value="<%= @username %>">
+    <% if params["surfeit"] %>
+      <input type="hidden" name="surfeit" value="yes">
+    <% elsif params["dearth"] %>
+      <input type="hidden" name="dearth" value="yes">
+    <% end %>
+    <input type="submit" value="Submit">
+</form>
+
+<% else %>
+
+  <h3>Select up to six resorts of interest:</h3>
+
+  <form action="/display" method="get">
+
+  <% @resort_list.each do |r| %>
+    <input type="checkbox" name="<%= r.name %>" value = "yes"><%=r.name %><br />
+    <% end %>
+  
+    <input type="hidden" name="username" value=<%= params["username"] %>>
+      <br>
+      <input type="submit" value="Submit">
+      <br>
+    </form>
+  
+    <hr>
+    
+  <form action="/" method="get">
+    <input type="submit" value="Enter a different user name">
+  </form>
+  
+<% end %>
+  
