@@ -45,6 +45,14 @@ class User
     @table   = "users"
   end
   
+  # Public: insert_user_resort
+  # Inserts a record into the users_resorts bridge table.
+  #
+  # Parameters:
+  # user_id   - Number: ID associated with user record in users table.
+  # resort_id - Number: ID associated with resort record in resorts table.
+  #
+  # Returns: none.
   
   def insert_user_resort(user_id,resort_id)
       
@@ -52,9 +60,25 @@ class User
     
   end
   
+  # Public: get_user_resorts
+  # Selects records in bridge table associated with a given user ID.
+  #
+  # Parameters:
+  # user_id - Number: ID associated with user record in users table.
+  #
+  # Returns: Array of hashes containing bridge table records.
+  
   def get_user_resorts(user_id)
     DATABASE.execute("SELECT resort_id FROM users_resorts WHERE user_id = #{user_id}")
   end
+  
+  # Public: delete_user_resorts
+  # Deletes records in bridge table associated with a given user ID.
+  #
+  # Parameters:
+  # user_id - Number: ID associated with user record in users table.
+  #
+  # Returns: none.
   
   def delete_user_resorts(user_id)
     DATABASE.execute("DELETE FROM users_resorts WHERE user_id = #{user_id}")

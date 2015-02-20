@@ -95,7 +95,11 @@ before "/display" do
     params.reject!{ |k,v| k == "username" }
     
     if params.length > 6
-      redirect to("/change_resorts?username=#{@user.name}&surfeit=yes")
+      if params["state"]
+        redirect to("/change_resorts?username=#{@user.name}&state=#{params["state"]}&surfeit=yes")
+      else
+        redirect to("/change_resorts?username=#{@user.name}&surfeit=yes")
+      end
     end
 
     params.each do |r,y| #each resort
@@ -108,6 +112,7 @@ before "/display" do
   else
     
     @user = new_user_test[0]
+    @state = params["state"]
     params.reject!{ |k,v| k == "username" || k == "state" }
     
     user_resorts = @user.get_user_resorts(@user.id) #array of hashes
@@ -115,9 +120,17 @@ before "/display" do
     if user_resorts.length == 0 #if user has no resorts in bridge table
     
       if params.length > 6
-        redirect to("/change_resorts?username=#{@user.name}&surfeit=yes")
+        if @state
+          redirect to("/change_resorts?username=#{@user.name}&state=#{@state}&surfeit=yes")
+        else
+          redirect to("/change_resorts?username=#{@user.name}&surfeit=yes")
+        end
       elsif params.length == 0
-        redirect to("/change_resorts?username=#{@user.name}&dearth=yes")
+        if @state
+          redirect to("/change_resorts?username=#{@user.name}&state=#{@state}&dearth=yes")
+        else
+          redirect to("/change_resorts?username=#{@user.name}&&dearth=yes")
+        end
       end
     
       params.each do |r,y| #each resort
@@ -167,8 +180,6 @@ before "/display" do
     @resorts << resort
 
     forecast = ForecastIO.forecast(resort.latitude, resort.longitude, options = {params: {exclude: 'currently,minutely,hourly,flags' }} )
-    
-    #offset = forecast["offset"]
     
     wx_cond = {
       time: [],
@@ -252,16 +263,15 @@ before "/display" do
   end
   
   #fill marker list for legends
-  @markers = Marker.all("markers") #array of objs?
+  @markers = Marker.all("markers") #array of objs
   
-  #create arrays for chart display
+  #create arrays for chart data
   @temp_min_chart_data = []
   @temp_max_chart_data = []
   @wind_speed_chart_data = []
   @cloud_cover_chart_data = []
   
-  xaxis_labels = ["Today","Tomorrow","Day 2","Day 3"]
-  
+  #populate chart data arrays
   forecasts.each do |k,v|
     #for each resort start hash
     resort_hash_tmin = {name: k, data:[]}
