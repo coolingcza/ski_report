@@ -1,15 +1,31 @@
-
+<hr>
 <table>
-<% @resorts.each do |r| %>
+  <col width="275">
+  <col width="100">
   <tr>
     <td>
-      <%= r.name %>
+      <table>
+        <col width="200">
+        <col width="30">
+      <% @resorts.each do |r| %>
+        <tr>
+          <td>
+            <%= r.name %>
+          </td>
+          <td align="center">
+            <b><%= r.name[0..0] %></b>
+          </td>
+        </tr>
+      <% end %>
+      </table>
     </td>
     <td align="center">
-      <b><%= r.name[0..0] %></b>
+      <form action="/change_resorts" method="get">
+        <input type="hidden" name="username" value=<%= @username %>>
+        <input type="submit" value="Change Resorts">
+      </form>
     </td>
   </tr>
-<% end %>
 </table>
 
 <hr>
@@ -152,11 +168,14 @@
 
 </table>
 
-<form action="/change_resorts" method="get">
-  <input type="hidden" name="username" value=<%= @username %>>
-  <input type="submit" value="Change Resorts">
-</form>
-
 <hr>
-<% #javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
-<% #line_chart @temp_min_chart %>
+
+<%= line_chart @temp_max_chart_data, {library: {fontName: "Times New Roman", title: "Maximum Temperature", hAxis: { format: 'MMM d' }, vAxis: {title: "Degrees F"}, colors:["06C","FF3","0C0","F93","39F","CCC"]}} %>
+
+<%= line_chart @temp_min_chart_data, {library: {fontName: "Times New Roman", title: "Minimum Temperature", hAxis: { format: 'MMM d' }, vAxis: {title: "Degrees F"}, colors:["06C","FF3","0C0","F93","39F","CCC"]}} %>
+
+<%= line_chart @wind_speed_chart_data, {library: {fontName: "Times New Roman", title: "Wind Speed", hAxis: { format: 'MMM d' }, vAxis: {title: "MPH"}, colors:["06C","FF3","0C0","F93","39F","CCC"]}} %>
+
+<%= line_chart @cloud_cover_chart_data, {library: {fontName: "Times New Roman", title: "Cloud Cover", hAxis: { format: 'MMM d' }, vAxis: {title: "Percent"}, colors:["06C","FF3","0C0","F93","39F","CCC"]}} %>
+
+

@@ -37,7 +37,11 @@ end
 
 get "/new_user" do
   @path = request.path_info
-  @state_list = Resort.get_states
+  
+  @state_list = []
+  array_results = Resort.get_states
+  array_results.each { |a| @state_list << a["state"] }
+  
   @state = params["state"]
   @username = params["username"]
   @var_text = "Hello, new user: #{params["username"]}"
@@ -78,20 +82,17 @@ get "/change_resorts" do
   
 end
 
-get '/set_state' do
-  #do_something
-  redirect back
-end
 
 before "/display" do
-  source = request.referrer
-
-  if source.include?("new")
-
+  #source = request.referrer
+  
+  new_user_test = User.where_name(params["username"])
+  
+  if new_user_test.length == 0
     @user = User.new({"name"=>params["username"]})
-    params.reject!{ |k,v| k == "username" }
-    
     @user.insert
+    
+    params.reject!{ |k,v| k == "username" }
     
     if params.length > 6
       redirect to("/change_resorts?username=#{@user.name}&surfeit=yes")
@@ -102,33 +103,36 @@ before "/display" do
       @user.insert_user_resort(@user.id,resort.id)
     end
     
-    @username = @user.name
+    user_resorts = @user.get_user_resorts(@user.id)
     
   else
     
-    @user = User.where_name(params["username"])[0]
+    @user = new_user_test[0]
+    params.reject!{ |k,v| k == "username" || k == "state" }
     
-    if @user.get_user_resorts(@user.id).length == 0
-      params.reject!{ |k,v| k == "username" }
-      
+    user_resorts = @user.get_user_resorts(@user.id) #array of hashes
+    
+    if user_resorts.length == 0 #if user has no resorts in bridge table
+    
       if params.length > 6
         redirect to("/change_resorts?username=#{@user.name}&surfeit=yes")
       elsif params.length == 0
         redirect to("/change_resorts?username=#{@user.name}&dearth=yes")
       end
-      
+    
       params.each do |r,y| #each resort
         resort = Resort.where_name(r)[0] #generate resort object
         @user.insert_user_resort(@user.id,resort.id)
       end
       
+      user_resorts = @user.get_user_resorts(@user.id)
+      
     end
-    
-    @username = @user.name
+
     
   end
   
-  user_resorts = @user.get_user_resorts(@user.id)
+  @username = @user.name
   
   forecasts = {}
   map_markers = {
@@ -164,7 +168,10 @@ before "/display" do
 
     forecast = ForecastIO.forecast(resort.latitude, resort.longitude, options = {params: {exclude: 'currently,minutely,hourly,flags' }} )
     
+    #offset = forecast["offset"]
+    
     wx_cond = {
+      time: [],
       p_type: [],
       p_accumulation: [],
       p_probability: [],
@@ -176,11 +183,16 @@ before "/display" do
     
     for i in 0..3
       d = forecast["daily"]["data"][i]
+      
+      wx_cond[:time] << Time.at(d["time"])
+      
       wx_cond[:p_type] << d["precipType"]
       if d["precipType"]=="snow"
         m = Marker.find("markers",1)
       elsif d["precipType"]=="rain"
         m = Marker.find("markers",2)
+      elsif d["precipType"]=="sleet"
+        m = Marker.find("markers",12)
       else
         m = Marker.find("markers",3)
       end
@@ -243,22 +255,32 @@ before "/display" do
   @markers = Marker.all("markers") #array of objs?
   
   #create arrays for chart display
-  @temp_min_chart = []
-  @temp_max_chart = []
-  @wind_speed_chart = []
-  @cloud_cover_chart = []
+  @temp_min_chart_data = []
+  @temp_max_chart_data = []
+  @wind_speed_chart_data = []
+  @cloud_cover_chart_data = []
+  
+  xaxis_labels = ["Today","Tomorrow","Day 2","Day 3"]
   
   forecasts.each do |k,v|
-    tminhash = {name: k, data: v[:t_min]}
-    @temp_min_chart << tminhash
-    tmaxhash = {name: k, data: v[:t_max]}
-    @temp_max_chart << tmaxhash
-    windspeedhash = {name: k, data: v[:wind_speed]}
-    @wind_speed_chart << windspeedhash
-    cloudcoverhash = {name: k, data: v[:cloud_cover]}
-    @cloud_cover_chart << cloudcoverhash
+    #for each resort start hash
+    resort_hash_tmin = {name: k, data:[]}
+    resort_hash_tmax = {name: k, data:[]}
+    resort_hash_windspeed = {name: k, data:[]}
+    resort_hash_cloudcover = {name: k, data:[]}
+    for i in 0..3
+      resort_hash_tmin[:data] << [v[:time][i],v[:t_min][i]]
+      resort_hash_tmax[:data] << [v[:time][i],v[:t_max][i]]
+      resort_hash_windspeed[:data] << [v[:time][i],v[:wind_speed][i]]
+      resort_hash_cloudcover[:data] << [v[:time][i],v[:cloud_cover][i]*100]
+    end
+    @temp_min_chart_data << resort_hash_tmin
+    @temp_max_chart_data << resort_hash_tmax
+    @wind_speed_chart_data << resort_hash_windspeed
+    @cloud_cover_chart_data << resort_hash_cloudcover
   end
-    
+ 
+  #binding.pry
   
 end
 
