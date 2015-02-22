@@ -176,7 +176,7 @@ before "/display" do
         if @state
           redirect to("/change_resorts?username=#{@user.name}&state=#{@state}&dearth=yes")
         else
-          redirect to("/change_resorts?username=#{@user.name}&&dearth=yes")
+          redirect to("/change_resorts?username=#{@user.name}&dearth=yes")
         end
       end
     
@@ -235,10 +235,6 @@ before "/display" do
       p_type: [],
       p_accumulation: [],
       p_probability: [],
-      #t_min: [],
-      #t_max: [],
-      #wind_speed: [],
-      #cloud_cover: []
     }
     
     
@@ -286,11 +282,7 @@ before "/display" do
       end
       string = "color:0x"+m.description+"%7Clabel:#{resort.name[0..0]}%7C"+ resort.latitude.to_s+","+resort.longitude.to_s
       map_markers["#{i}"]["prob"] << string
-      
-      #wx_cond[:t_min] << d["temperatureMin"]
-      #wx_cond[:t_max] << d["temperatureMax"]
-      #wx_cond[:wind_speed] << d["windSpeed"]
-      #wx_cond[:cloud_cover] << d["cloudCover"]
+
     end
     
     forecasts["#{resort.name}"] = pcp_cond

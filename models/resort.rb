@@ -39,6 +39,14 @@ class Resort
     results_as_objects
   end
   
+  # Public: .get_states
+  # Returns the unique values from states field in resorts table.
+  #
+  # Parameters:
+  # none.
+  #
+  # Returns: Array of hashes {"state" => unique record}.
+  
   def self.get_states
     results = DATABASE.execute("SELECT DISTINCT state FROM resorts")
   end
