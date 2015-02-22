@@ -35,6 +35,53 @@ get "/user_sign_in" do
   
 end
 
+get "/admin" do
+  @state_list = []
+  array_results = Resort.get_states
+  array_results.each { |a| @state_list << a["state"] }
+  
+  @resorts = Resort.all("resorts")
+  
+  @change = true if params["change"]
+  
+  if @change
+    if params["addresortname"]
+      if Resort.where_name(params["addresortname"]).length == 0
+        @newresort = Resort.new({
+          "name" => params["addresortname"],
+          "latitude" => params["latitude"].to_f,
+          "longitude" => params["longitude"].to_f,
+          "state" => params["state"]
+          })
+        @newresort.insert
+        @resorts = Resort.all("resorts")
+      end
+      @display = :add
+      
+    elsif params["delresortid"]
+      @delresort = Resort.find("resorts",params["delresortid"])
+      @delresort.delete
+      @display = :rem
+      @resorts = Resort.all("resorts")
+      
+    elsif params["newresortname"]
+      @updresort = Resort.find("resorts",params["updresortid"])
+      @old_name = @updresort.name
+      @updresort.name = params["newresortname"]
+      @updresort.save
+      @display = :upd
+      @resorts = Resort.all("resorts")
+      
+    elsif params["display"]
+      @display = :dis
+      
+    end
+  end
+  
+  erb :admin, :layout => :boilerplate
+  
+end
+
 get "/new_user" do
   @path = request.path_info
   
@@ -148,6 +195,8 @@ before "/display" do
   @username = @user.name
   
   forecasts = {}
+  forecasts_hourly = {}
+  
   map_markers = {
     "0" => {
       "prob" => [],
@@ -179,25 +228,26 @@ before "/display" do
     resort = Resort.find("resorts",r["resort_id"])
     @resorts << resort
 
-    forecast = ForecastIO.forecast(resort.latitude, resort.longitude, options = {params: {exclude: 'currently,minutely,hourly,flags' }} )
+    forecast = ForecastIO.forecast(resort.latitude, resort.longitude, options = {params: {exclude: 'currently,minutely,flags,alerts' }} )
     
-    wx_cond = {
+    pcp_cond = {
       time: [],
       p_type: [],
       p_accumulation: [],
       p_probability: [],
-      t_min: [],
-      t_max: [],
-      wind_speed: [],
-      cloud_cover: []
+      #t_min: [],
+      #t_max: [],
+      #wind_speed: [],
+      #cloud_cover: []
     }
+    
     
     for i in 0..3
       d = forecast["daily"]["data"][i]
       
-      wx_cond[:time] << Time.at(d["time"])
+      pcp_cond[:time] << Time.at(d["time"])
       
-      wx_cond[:p_type] << d["precipType"]
+      pcp_cond[:p_type] << d["precipType"]
       if d["precipType"]=="snow"
         m = Marker.find("markers",1)
       elsif d["precipType"]=="rain"
@@ -211,7 +261,7 @@ before "/display" do
       map_markers["#{i}"]["type"] << string
       
       #color:0xFFFF00%7C62.107733,-145.541936
-      wx_cond[:p_accumulation] << d["precipAccumulation"]
+      pcp_cond[:p_accumulation] << d["precipAccumulation"]
       if !d["precipAccumulation"]
         m = Marker.find("markers",4)
       elsif d["precipAccumulation"] > 0 && d["precipAccumulation"] < 2
@@ -224,7 +274,7 @@ before "/display" do
       string = "color:0x"+m.description+"%7Clabel:#{resort.name[0..0]}%7C"+resort.latitude.to_s+","+resort.longitude.to_s
       map_markers["#{i}"]["accum"] << string
       
-      wx_cond[:p_probability] << d["precipProbability"]
+      pcp_cond[:p_probability] << d["precipProbability"]
       if d["precipProbability"]==0
         m = Marker.find("markers",8)
       elsif d["precipProbability"] > 0 && d["precipProbability"] < 0.5
@@ -237,14 +287,32 @@ before "/display" do
       string = "color:0x"+m.description+"%7Clabel:#{resort.name[0..0]}%7C"+ resort.latitude.to_s+","+resort.longitude.to_s
       map_markers["#{i}"]["prob"] << string
       
-      wx_cond[:t_min] << d["temperatureMin"]
-      wx_cond[:t_max] << d["temperatureMax"]
-      wx_cond[:wind_speed] << d["windSpeed"]
-      wx_cond[:cloud_cover] << d["cloudCover"]
+      #wx_cond[:t_min] << d["temperatureMin"]
+      #wx_cond[:t_max] << d["temperatureMax"]
+      #wx_cond[:wind_speed] << d["windSpeed"]
+      #wx_cond[:cloud_cover] << d["cloudCover"]
     end
     
-    forecasts["#{resort.name}"] = wx_cond
+    forecasts["#{resort.name}"] = pcp_cond
 
+    resort_hourly = { 
+      temp_data: [],
+      wind_speed_data: [],
+      cloud_cover_data: []
+    }
+    
+    for i in 0..48
+      h = forecast["hourly"]["data"][i]
+      tm = Time.at(h["time"])
+      
+      resort_hourly[:temp_data] << [tm, h["temperature"]]
+      resort_hourly[:wind_speed_data] << [tm, h["windSpeed"]]
+      resort_hourly[:cloud_cover_data] << [tm, h["cloudCover"]*100]
+      
+    end
+
+    forecasts_hourly["#{resort.name}"] = resort_hourly
+    
   end
     
   
@@ -265,29 +333,19 @@ before "/display" do
   #fill marker list for legends
   @markers = Marker.all("markers") #array of objs
   
+  
+  
+  
   #create arrays for chart data
-  @temp_min_chart_data = []
-  @temp_max_chart_data = []
+  @temp_chart_data = []
   @wind_speed_chart_data = []
   @cloud_cover_chart_data = []
   
   #populate chart data arrays
-  forecasts.each do |k,v|
-    #for each resort start hash
-    resort_hash_tmin = {name: k, data:[]}
-    resort_hash_tmax = {name: k, data:[]}
-    resort_hash_windspeed = {name: k, data:[]}
-    resort_hash_cloudcover = {name: k, data:[]}
-    for i in 0..3
-      resort_hash_tmin[:data] << [v[:time][i],v[:t_min][i]]
-      resort_hash_tmax[:data] << [v[:time][i],v[:t_max][i]]
-      resort_hash_windspeed[:data] << [v[:time][i],v[:wind_speed][i]]
-      resort_hash_cloudcover[:data] << [v[:time][i],v[:cloud_cover][i]*100]
-    end
-    @temp_min_chart_data << resort_hash_tmin
-    @temp_max_chart_data << resort_hash_tmax
-    @wind_speed_chart_data << resort_hash_windspeed
-    @cloud_cover_chart_data << resort_hash_cloudcover
+  forecasts_hourly.each do |k,v|
+    @temp_chart_data << {name: k, data: v[:temp_data]}
+    @wind_speed_chart_data << {name: k, data: v[:wind_speed_data]}
+    @cloud_cover_chart_data << {name: k, data: v[:cloud_cover_data]}
   end
  
   #binding.pry

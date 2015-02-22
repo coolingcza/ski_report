@@ -19,10 +19,15 @@
       <% end %>
       </table>
     </td>
-    <td align="center">
+    <td align="center" width="200px">
       <form action="/change_resorts" method="get">
         <input type="hidden" name="username" value=<%= @username %>>
         <input type="submit" value="Change Resorts">
+      </form>
+    </td>
+    <td align="center" width="200px">
+      <form action="/">
+        <input type="submit" value="Change User">
       </form>
     </td>
   </tr>
@@ -170,12 +175,10 @@
 
 <hr>
 
-<%= line_chart @temp_max_chart_data, {library: {fontName: "Times New Roman", title: "Maximum Temperature", hAxis: { format: 'MMM d' }, vAxis: {title: "Degrees F"}, colors:["06C","FF3","0C0","F93","39F","CCC"]}} %>
+<%= line_chart @temp_chart_data, {library: {fontName: "Times New Roman", title: "Temperature", hAxis: { format: 'MMM d h a' }, vAxis: {title: "Degrees F"}, colors:["06C","FF3","0C0","F93","39F","CCC"]}} %>
 
-<%= line_chart @temp_min_chart_data, {library: {fontName: "Times New Roman", title: "Minimum Temperature", hAxis: { format: 'MMM d' }, vAxis: {title: "Degrees F"}, colors:["06C","FF3","0C0","F93","39F","CCC"]}} %>
+<%= line_chart @wind_speed_chart_data, {library: {fontName: "Times New Roman", title: "Wind Speed", hAxis: { format: 'MMM d h a' }, vAxis: {title: "MPH"}, colors:["06C","FF3","0C0","F93","39F","CCC"]}} %>
 
-<%= line_chart @wind_speed_chart_data, {library: {fontName: "Times New Roman", title: "Wind Speed", hAxis: { format: 'MMM d' }, vAxis: {title: "MPH"}, colors:["06C","FF3","0C0","F93","39F","CCC"]}} %>
-
-<%= line_chart @cloud_cover_chart_data, {library: {fontName: "Times New Roman", title: "Cloud Cover", hAxis: { format: 'MMM d' }, vAxis: {title: "Percent"}, colors:["06C","FF3","0C0","F93","39F","CCC"]}} %>
+<%= line_chart @cloud_cover_chart_data, {library: {fontName: "Times New Roman", title: "Cloud Cover", hAxis: { format: 'MMM d h a' }, vAxis: {title: "Percent", maxValue: "105"}, colors:["06C","FF3","0C0","F93","39F","CCC"]}} %>
 
 
