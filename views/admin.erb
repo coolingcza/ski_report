@@ -1,0 +1,151 @@
+<h2>Administration Page</h2>
+
+<hr>
+
+<h2>Available Actions:</h2>
+
+<ul>
+<li>
+  <form action="/admin" method="get">
+    <b>Add Ski Resort</b> 
+    <br>
+    Enter resort name: <input type="text" name="addresortname"><br>
+    Enter resort longitude (eg -106.06688): 
+    <input type="text" name="longitude" min="-180" max="180"><br>
+    Enter resort latitude (eg 39.480506):
+    <input type="text" name="latitude" min="-90" max="90"><br>
+    Enter resort state (eg Colorado):
+    <input type="text" name="state"><br>
+    
+    <input type="submit" value="Add">
+    <input type="hidden" name="change" value="yes">
+  </form>
+</li>
+
+<div style="height: 25px;"> </div>
+
+<li>
+  <form action="/admin" method="get">
+    <b>Remove Ski Resort</b>
+    <br>
+    Select Resort:
+    <select name="delresortid">
+    <% @resorts.each do |r| %>
+      <option value= <%= r.id %> > <%= r.name %>, <%= r.state %> </option>
+    <% end %>
+    </select><br>
+    <input type="hidden" name="change" value="yes">
+    <input type="submit" value="Remove">
+  </form>
+</li>
+
+<div style="height: 25px;"> </div>
+
+<li>
+  <form action="/admin" method="get">
+    <b>Update Ski Resort Info</b>
+    <br>
+    Select Resort:
+    <select name="updresortid">
+    <% @resorts.each do |r| %>
+      <option value= <%= r.id %> > <%= r.name %>, <%= r.state %> </option>
+    <% end %>
+    </select><br>
+    New Resort Name: <input type="text" name="newresortname"><br>
+    <input type="hidden" name="change" value="yes">
+    <input type="submit" value="Update">
+  </form>
+</li>
+
+<div style="height: 25px;"> </div>
+
+<li>
+  <form action="/admin" method="get">
+    <b>Display All Resorts</b>
+    <input type="hidden" name="display" value="yes">
+    <input type="hidden" name="change" value="yes">
+    <input type="submit" value="Display">
+  </form>
+</li>
+
+</ul>
+
+<hr>
+<% if @change %>
+  <% if @display == :dis %>
+  <h3>All Resorts:</h3>
+  <table>
+    <tr>
+      <td><b>Resort Name</b></td>
+      <td><b>Latitude</b></td>
+      <td><b>Longitude</b></td>
+      <td><b>State</b></td>
+    </tr>
+    <% @resorts.each do |r| %>
+    <tr>
+      <td><%= r.name %></td> 
+      <td><%= r.latitude %></td> 
+      <td><%= r.longitude %></td> 
+      <td><%= r.state %></td>
+    </tr>
+      
+    <% end %>
+  </table>
+  
+  <% elsif @display == :add %>
+    <% if @newresort %>
+  
+    <h3>Added:</h3>
+    <table>
+      <tr>
+        <td><b>Resort Name</b></td>
+        <td><b>Latitude</b></td>
+        <td><b>Longitude</b></td>
+        <td><b>State</b></td>
+      </tr>
+      <tr>
+        <td><%= @newresort.name %></td> 
+        <td><%= @newresort.latitude %></td> 
+        <td><%= @newresort.longitude %></td> 
+        <td><%= @newresort.state %></td>
+      </tr>
+    </table>
+    
+    <% else %>
+    <h3>Resort of that name already exists. Please check resort list.</h3>
+    
+    <% end %>
+  
+  <% elsif @display == :rem %>
+  <h3>Removed:</h3>
+  <table>
+    <tr>
+      <td><b>Resort Name</b></td>
+      <td><b>Latitude</b></td>
+      <td><b>Longitude</b></td>
+      <td><b>State</b></td>
+    </tr>
+    <tr>
+      <td><%= @delresort.name %></td> 
+      <td><%= @delresort.latitude %></td> 
+      <td><%= @delresort.longitude %></td> 
+      <td><%= @delresort.state %></td>
+    </tr>
+  </table>
+  
+  <% elsif @display == :upd %>
+  <h3>Updated:</h3>
+  <table>
+    <tr>
+      <td><b>Old Resort Name</b></td>
+      <td><b>New Resort Name</b></td>
+    </tr>
+    <tr>
+      <td><%= @old_name %></td> 
+      <td><%= @updresort.name %></td> 
+
+    </tr>
+  </table>
+  <% end %>
+  
+<% end %>
