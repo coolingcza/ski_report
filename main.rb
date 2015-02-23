@@ -35,52 +35,7 @@ get "/user_sign_in" do
   
 end
 
-get "/admin" do
-  @state_list = []
-  array_results = Resort.get_states
-  array_results.each { |a| @state_list << a["state"] }
-  
-  @resorts = Resort.all("resorts")
-  
-  @change = true if params["change"]
-  
-  if @change
-    if params["addresortname"]
-      if Resort.where_name(params["addresortname"]).length == 0
-        @newresort = Resort.new({
-          "name" => params["addresortname"],
-          "latitude" => params["latitude"].to_f,
-          "longitude" => params["longitude"].to_f,
-          "state" => params["state"]
-          })
-        @newresort.insert
-        @resorts = Resort.all("resorts")
-      end
-      @display = :add
-      
-    elsif params["delresortid"]
-      @delresort = Resort.find("resorts",params["delresortid"])
-      @delresort.delete
-      @display = :rem
-      @resorts = Resort.all("resorts")
-      
-    elsif params["newresortname"]
-      @updresort = Resort.find("resorts",params["updresortid"])
-      @old_name = @updresort.name
-      @updresort.name = params["newresortname"]
-      @updresort.save
-      @display = :upd
-      @resorts = Resort.all("resorts")
-      
-    elsif params["display"]
-      @display = :dis
-      
-    end
-  end
-  
-  erb :admin, :layout => :boilerplate
-  
-end
+
 
 get "/new_user" do
   @path = request.path_info
@@ -101,6 +56,7 @@ get "/new_user" do
   
 end
   
+
 
 get "/change_resorts" do
   
@@ -130,6 +86,7 @@ get "/change_resorts" do
 end
 
 
+
 before "/display" do
   #source = request.referrer
   
@@ -138,17 +95,18 @@ before "/display" do
   if new_user_test.length == 0
     @user = User.new({"name"=>params["username"]})
     @user.insert
+    @state = params["state"]
     
-    params.reject!{ |k,v| k == "username" }
+    params.reject!{ |k,v| k == "username" || k == "state" }
     
     if params.length > 6
-      if params["state"]
-        redirect to("/change_resorts?username=#{@user.name}&state=#{params["state"]}&surfeit=yes")
+      if @state
+        redirect to("/change_resorts?username=#{@user.name}&state=#{@state}&surfeit=yes")
       else
         redirect to("/change_resorts?username=#{@user.name}&surfeit=yes")
       end
     end
-
+    
     params.each do |r,y| #each resort
       resort = Resort.where_name(r)[0] #generate resort object
       @user.insert_user_resort(@user.id,resort.id)
@@ -339,8 +297,7 @@ before "/display" do
     @wind_speed_chart_data << {name: k, data: v[:wind_speed_data]}
     @cloud_cover_chart_data << {name: k, data: v[:cloud_cover_data]}
   end
- 
-  #binding.pry
+
   
 end
 
@@ -349,4 +306,58 @@ get "/display" do
 end
 
 
-#binding.pry
+
+get "/admin" do
+  @state_list = []
+  array_results = Resort.get_states
+  array_results.each { |a| @state_list << a["state"] }
+  
+  @resorts = Resort.all("resorts")
+  @user_list = User.all("users")
+  @change = true if params["change"]
+  
+  if @change
+    if params["addresortname"]
+      if Resort.where_name(params["addresortname"]).length == 0
+        @newresort = Resort.new({
+          "name" => params["addresortname"],
+          "latitude" => params["latitude"].to_f,
+          "longitude" => params["longitude"].to_f,
+          "state" => params["state"]
+          })
+        @newresort.insert
+        @resorts = Resort.all("resorts")
+      end
+      @display = :add
+      
+    elsif params["delresortid"]
+      @delresort = Resort.find("resorts",params["delresortid"])
+      @delresort.delete
+      #needs to clean up bridge table as well
+      @display = :rem_res
+      @resorts = Resort.all("resorts")
+      
+    elsif params["newresortname"]
+      @updresort = Resort.find("resorts",params["updresortid"])
+      @old_name = @updresort.name
+      @updresort.name = params["newresortname"]
+      @updresort.save
+      @display = :upd
+      @resorts = Resort.all("resorts")
+      
+    elsif params["display"]
+      @display = :dis
+      
+    elsif params["deluserid"]
+      @deluser = User.find("users",params["deluserid"])
+      @deluser.delete
+      @deluser.delete_user_resorts(@deluser.id)
+      @user_list = User.all("users")
+      @display = :rem_usr
+    end
+  end
+  
+  erb :admin, :layout => :boilerplate
+  
+end
+

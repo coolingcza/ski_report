@@ -17,7 +17,8 @@ class Resort
   extend DatabaseClassMethods
   include DatabaseInstanceMethods
   
-  attr_reader :id, :name, :latitude, :longitude, :state, :table
+  attr_reader :id, :latitude, :longitude, :state, :table
+  attr_accessor :name
   
   # Public: .where_name
   # Get a list of resorts with the given name.

@@ -68,6 +68,23 @@
   </form>
 </li>
 
+<div style="height: 25px;"> </div>
+
+<li>
+  <form action="/admin" method="get">
+    <b>Remove User</b>
+    <br>
+    Select User:
+    <select name="deluserid">
+    <% @user_list.each do |u| %>
+      <option value= <%= u.id %> > <%= u.name %> </option>
+    <% end %>
+    </select><br>
+    <input type="hidden" name="change" value="yes">
+    <input type="submit" value="Remove">
+  </form>
+</li>
+
 </ul>
 
 <hr>
@@ -116,7 +133,7 @@
     
     <% end %>
   
-  <% elsif @display == :rem %>
+  <% elsif @display == :rem_res %>
   <h3>Removed:</h3>
   <table>
     <tr>
@@ -143,6 +160,20 @@
     <tr>
       <td><%= @old_name %></td> 
       <td><%= @updresort.name %></td> 
+
+    </tr>
+  </table>
+  
+  <% elsif @display == :rem_usr %>
+  <h3>Removed:</h3>
+  <table>
+    <tr>
+      <td><b>User ID</b></td>
+      <td><b>User Name</b></td>
+    </tr>
+    <tr>
+      <td><%= @deluser.id %></td> 
+      <td><%= @deluser.name %></td> 
 
     </tr>
   </table>
