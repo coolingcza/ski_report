@@ -39,11 +39,18 @@ class User
   end
   
   
+  def self.exists?(name)
+    true if User.where_name(name).length > 0
+  end
+  
+  
   def initialize(options)
     @id      = options["id"]
     @name    = options["name"]
     @table   = "users"
   end
+  
+
   
   # Public: insert_user_resort
   # Inserts a record into the users_resorts bridge table.
@@ -54,9 +61,9 @@ class User
   #
   # Returns: none.
   
-  def insert_user_resort(user_id,resort_id)
+  def insert_user_resort(resort_id)
       
-    DATABASE.execute("INSERT INTO users_resorts (user_id, resort_id) VALUES (#{user_id}, #{resort_id})")
+    DATABASE.execute("INSERT INTO users_resorts (user_id, resort_id) VALUES (#{@id}, #{resort_id})")
     
   end
   
@@ -68,8 +75,8 @@ class User
   #
   # Returns: Array of hashes containing bridge table records.
   
-  def get_user_resorts(user_id)
-    DATABASE.execute("SELECT resort_id FROM users_resorts WHERE user_id = #{user_id}")
+  def get_user_resorts
+    DATABASE.execute("SELECT resort_id FROM users_resorts WHERE user_id = #{@id}")
   end
   
   # Public: delete_user_resorts
@@ -80,8 +87,12 @@ class User
   #
   # Returns: none.
   
-  def delete_user_resorts(user_id)
-    DATABASE.execute("DELETE FROM users_resorts WHERE user_id = #{user_id}")
+  def delete_user_resorts
+    DATABASE.execute("DELETE FROM users_resorts WHERE user_id = #{@id}")
+  end
+  
+  def has_resorts?
+    true if get_user_resorts.length > 0
   end
   
 end

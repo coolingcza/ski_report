@@ -56,8 +56,8 @@ class UserTest < Minitest::Test
   end
   
   def test_insert_user_resort
-    user = User.new({"id"=>1,"name"=>"Roger"})
     a = DATABASE.execute("SELECT * FROM users_resorts")
+    user = User.new({"id"=>1,"name"=>"Roger"})
     user.insert_user_resort(user.id,1)
     b = DATABASE.execute("SELECT * FROM users_resorts")
     assert_equal(a.length+1,b.length)

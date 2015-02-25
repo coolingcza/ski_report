@@ -21,7 +21,7 @@
     </td>
     <td align="center" width="200px">
       <form action="/change_resorts" method="get">
-        <input type="hidden" name="username" value=<%= @username %>>
+        <input type="hidden" name="username" value=<%= @user.name %>>
         <input type="submit" value="Change Resorts">
       </form>
     </td>
@@ -80,16 +80,16 @@
     </table>
   </td>
   <td>
-  <img src=<%= @map_strings["0"]["prob"] %> />
+  <img src=<%= @map_strings["0"]["prob"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["1"]["prob"] %> />
+  <img src=<%= @map_strings["1"]["prob"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["2"]["prob"] %> />
+  <img src=<%= @map_strings["2"]["prob"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["3"]["prob"] %> />
+  <img src=<%= @map_strings["3"]["prob"].url %> />
   </td>
 
 </tr>
@@ -119,16 +119,16 @@
     </table>
   </td>
   <td>
-  <img src=<%= @map_strings["0"]["type"] %> />
+  <img src=<%= @map_strings["0"]["type"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["1"]["type"] %> />
+  <img src=<%= @map_strings["1"]["type"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["2"]["type"] %> />
+  <img src=<%= @map_strings["2"]["type"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["3"]["type"] %> />
+  <img src=<%= @map_strings["3"]["type"].url %> />
   </td>
 
 </tr>
@@ -157,16 +157,16 @@
     </table>
   </td>
   <td>
-  <img src=<%= @map_strings["0"]["accum"] %> />
+  <img src=<%= @map_strings["0"]["accum"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["1"]["accum"] %> />
+  <img src=<%= @map_strings["1"]["accum"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["2"]["accum"] %> />
+  <img src=<%= @map_strings["2"]["accum"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["3"]["accum"] %> />
+  <img src=<%= @map_strings["3"]["accum"].url %> />
   </td>
 
 </tr>
@@ -175,10 +175,10 @@
 
 <hr>
 
-<%= line_chart @temp_chart_data, {library: {fontName: "Times New Roman", title: "Temperature", hAxis: { format: 'MMM d h a' }, vAxis: {title: "Degrees F"}, colors:["00C","FF3","0C0","C60","39F","060"]}} %>
+<%= line_chart @temp_chart_data, {library: {fontName: "Times New Roman", title: "Temperature", pointSize: 2, hAxis: {format: 'MMM d h a'}, vAxis: {title: "Degrees F"}, colors:["00C","FF3","0C0","C60","39F","060"]}} %>
 
-<%= line_chart @wind_speed_chart_data, {library: {fontName: "Times New Roman", title: "Wind Speed", hAxis: { format: 'MMM d h a' }, vAxis: {title: "MPH"}, colors:["00C","FF3","0C0","C60","39F","060"]}} %>
+<%= line_chart @wind_speed_chart_data, {library: {fontName: "Times New Roman", title: "Wind Speed", pointSize: 2, hAxis: {format: 'MMM d h a'}, vAxis: {title: "MPH"}, colors:["00C","FF3","0C0","C60","39F","060"]}} %>
 
-<%= line_chart @cloud_cover_chart_data, {library: {fontName: "Times New Roman", title: "Cloud Cover", hAxis: { format: 'MMM d h a' }, vAxis: {title: "Percent", viewWindow: {max: 100, min: 0}}, colors:["00C","FF3","0C0","C60","39F","060"]}} %>
+<%= line_chart @cloud_cover_chart_data, {library: {fontName: "Times New Roman", title: "Cloud Cover", pointSize: 2, hAxis: {format: 'MMM d h a'}, vAxis: {title: "Percent", viewWindow: {max: 100, min: 0}}, colors:["00C","FF3","0C0","C60","39F","060"]}} %>
 
 
