@@ -1,0 +1,18 @@
+<h3>All Resorts:</h3>
+<table>
+  <tr>
+    <td><b>Resort Name</b></td>
+    <td><b>Latitude</b></td>
+    <td><b>Longitude</b></td>
+    <td><b>State</b></td>
+  </tr>
+  <% @resorts.each do |r| %>
+  <tr>
+    <td><%= r.name %></td> 
+    <td><%= r.latitude %></td> 
+    <td><%= r.longitude %></td> 
+    <td><%= r.state %></td>
+  </tr>
+    
+  <% end %>
+</table>

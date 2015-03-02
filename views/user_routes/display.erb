@@ -1,44 +1,219 @@
-<hr>
+<div class="change_buttons">
+<form action="/select_resorts" method="get">
+  <button type="submit">Change Resorts</button>
+</form>
+<form action="/" method="get">
+  <button type="submit">Change User</button>
+</form>
+</div>
+
+<div id="resort_legend">
 <table>
-  <col width="275">
-  <col width="100">
+  <col width="200">
+  <col width="30">
+<% @resorts.each do |r| %>
   <tr>
     <td>
-      <table>
-        <col width="200">
-        <col width="30">
-      <% @resorts.each do |r| %>
-        <tr>
-          <td>
-            <%= r.name %>
-          </td>
-          <td align="center">
-            <b><%= r.name[0..0] %></b>
-          </td>
-        </tr>
-      <% end %>
-      </table>
+      <%= r.name %>
     </td>
-    <td align="center" width="200px">
-      <form action="/change_resorts" method="get">
-        <input type="hidden" name="username" value=<%= @user.name %>>
-        <input type="submit" value="Change Resorts">
-      </form>
-    </td>
-    <td align="center" width="200px">
-      <form action="/">
-        <input type="submit" value="Change User">
-      </form>
+    <td align="center">
+      <b><%= r.name[0..0] %></b>
     </td>
   </tr>
+<% end %>
 </table>
+</div>
 
-<hr>
+<!-- Scroll table: -->
 
-<table width="1100" height="100%">
+<h4 class="map_row_title">Precipitation Probability</h4>
+<div class="map_legend">
+  <table>
+    <tr>
+      <td style="width:15px;background-color:#<%= "#{@markers[7].description}" %>"></td>
+      <td>0%</td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td style="width:15px;background-color:#<%= "#{@markers[8].description}" %>"></td>
+      <td>.01%-50%</td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td style="width:15px;background-color:#<%= "#{@markers[9].description}" %>"></td>
+      <td>51%-75%</td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td style="width:15px;background-color:#<%= "#{@markers[10].description}" %>"></td>
+      <td>76%-100%</td>
+    </tr>
+  </table>
+</div>
+
+<div class="map_row">
+<table>
+<tr align="center">
+  <td>
+    Today
+  </td>
+  <td>
+    Tomorrow
+  </td>
+  <td>
+    Day 2
+  </td>
+  <td>
+    Day 3
+  </td>
+</tr>
+
+<tr>
+  <td>
+  <img src=<%= @data.map_strings["0"]["prob"].url %> />
+  </td>
+  <td>
+  <img src=<%= @data.map_strings["1"]["prob"].url %> />
+  </td>
+  <td>
+  <img src=<%= @data.map_strings["2"]["prob"].url %> />
+  </td>
+  <td>
+  <img src=<%= @data.map_strings["3"]["prob"].url %> />
+  </td>
+</tr>
+</table>
+</div>
+
+<h4 class="map_row_title">Precipitation Type</h4>
+<div class="map_legend">
+  <table>
+    <tr>
+      <td style="width:15px;background-color:#<%= "#{@markers[2].description}" %>"></td>
+      <td>None</td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td style="width:15px;background-color:#<%= "#{@markers[1].description}" %>"></td>
+      <td>Rain</td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td style="width:15px;background-color:#<%= "#{@markers[11].description}" %>"></td>
+      <td>Sleet</td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td style="width:15px;background-color:#<%= "#{@markers[0].description}" %>"></td>
+      <td>Snow</td>
+    </tr>
+  </table>
+</div>
+
+<div class="map_row">
+  <table>
+    <tr align="center">
+      <td>
+        Today
+      </td>
+      <td>
+        Tomorrow
+      </td>
+      <td>
+        Day 2
+      </td>
+      <td>
+        Day 3
+      </td>
+    </tr>
+    <tr>
+      <td>
+      <img src=<%= @data.map_strings["0"]["type"].url %> />
+      </td>
+      <td>
+      <img src=<%= @data.map_strings["1"]["type"].url %> />
+      </td>
+      <td>
+      <img src=<%= @data.map_strings["2"]["type"].url %> />
+      </td>
+      <td>
+      <img src=<%= @data.map_strings["3"]["type"].url %> />
+      </td>
+    </tr>
+  </table>
+</div>
+
+<h4 class="map_row_title">Precipitation Accumulation</h4>
+<div class="map_legend">
+  <table>
+    <tr>
+      <td style="width:15px;background-color:#<%= "#{@markers[3].description}" %>"></td>
+      <td>None</td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td style="width:15px;background-color:#<%= "#{@markers[4].description}" %>"></td>
+      <td>Up to 2 in.</td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td style="width:15px;background-color:#<%= "#{@markers[5].description}" %>"></td>
+      <td>2 to 6 in.</td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td style="width:15px;background-color:#<%= "#{@markers[6].description}" %>"></td>
+      <td>More than 6 in.</td>
+    </tr>
+  </table>
+</div>
+
+<div class="map_row">
+  <table>
+    <tr align="center">
+      <td>
+        Today
+      </td>
+      <td>
+        Tomorrow
+      </td>
+      <td>
+        Day 2
+      </td>
+      <td>
+        Day 3
+      </td>
+    </tr>
+    <tr>
+      <td>
+      <img src=<%= @data.map_strings["0"]["accum"].url %> />
+      </td>
+      <td>
+      <img src=<%= @data.map_strings["1"]["accum"].url %> />
+      </td>
+      <td>
+      <img src=<%= @data.map_strings["2"]["accum"].url %> />
+      </td>
+      <td>
+      <img src=<%= @data.map_strings["3"]["accum"].url %> />
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- Original Table: -->
+<!-- <table width="1100" height="100%">
 
 <tr align="center">
-  
   <td>
   </td>
   <td>
@@ -53,7 +228,7 @@
   <td>
     Day 3
   </td>
-  
+
 </tr>
 
 <tr>
@@ -62,8 +237,10 @@
     <b>Precip Probability</b><br>
     <table>
       <tr>
+
         <td style="width:15px;background-color:#<%= "#{@markers[7].description}" %>"></td>
         <td>0%</td>
+
       </tr>
       <tr>
         <td style="width:15px;background-color:#<%= "#{@markers[8].description}" %>"></td>
@@ -80,16 +257,16 @@
     </table>
   </td>
   <td>
-  <img src=<%= @map_strings["0"]["prob"].url %> />
+  <img src=<%= @data.map_strings["0"]["prob"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["1"]["prob"].url %> />
+  <img src=<%= @data.map_strings["1"]["prob"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["2"]["prob"].url %> />
+  <img src=<%= @data.map_strings["2"]["prob"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["3"]["prob"].url %> />
+  <img src=<%= @data.map_strings["3"]["prob"].url %> />
   </td>
 
 </tr>
@@ -119,16 +296,16 @@
     </table>
   </td>
   <td>
-  <img src=<%= @map_strings["0"]["type"].url %> />
+  <img src=<%= @data.map_strings["0"]["type"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["1"]["type"].url %> />
+  <img src=<%= @data.map_strings["1"]["type"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["2"]["type"].url %> />
+  <img src=<%= @data.map_strings["2"]["type"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["3"]["type"].url %> />
+  <img src=<%= @data.map_strings["3"]["type"].url %> />
   </td>
 
 </tr>
@@ -157,28 +334,28 @@
     </table>
   </td>
   <td>
-  <img src=<%= @map_strings["0"]["accum"].url %> />
+  <img src=<%= @data.map_strings["0"]["accum"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["1"]["accum"].url %> />
+  <img src=<%= @data.map_strings["1"]["accum"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["2"]["accum"].url %> />
+  <img src=<%= @data.map_strings["2"]["accum"].url %> />
   </td>
   <td>
-  <img src=<%= @map_strings["3"]["accum"].url %> />
+  <img src=<%= @data.map_strings["3"]["accum"].url %> />
   </td>
 
 </tr>
 
-</table>
+</table> -->
 
-<hr>
+<% lib_vals = {fontName: "Times New Roman", pointSize: 0, hAxis:{format: 'M/d h a'}, colors:["00C","FF3","0C0","C60","39F","060"], legend: {position: 'bottom'}} %>
 
-<%= line_chart @temp_chart_data, {library: {fontName: "Times New Roman", title: "Temperature", pointSize: 2, hAxis: {format: 'MMM d h a'}, vAxis: {title: "Degrees F"}, colors:["00C","FF3","0C0","C60","39F","060"]}} %>
+<%= line_chart @data.temp_chart_data, {library: {title: "Temperature", vAxis: {title: "Degrees F"}}.merge(lib_vals)} %>
 
-<%= line_chart @wind_speed_chart_data, {library: {fontName: "Times New Roman", title: "Wind Speed", pointSize: 2, hAxis: {format: 'MMM d h a'}, vAxis: {title: "MPH"}, colors:["00C","FF3","0C0","C60","39F","060"]}} %>
+<%= line_chart @data.wind_speed_chart_data, {library: {title: "Wind Speed", vAxis: {title: "MPH"}}.merge(lib_vals)} %>
 
-<%= line_chart @cloud_cover_chart_data, {library: {fontName: "Times New Roman", title: "Cloud Cover", pointSize: 2, hAxis: {format: 'MMM d h a'}, vAxis: {title: "Percent", viewWindow: {max: 100, min: 0}}, colors:["00C","FF3","0C0","C60","39F","060"]}} %>
+<%= line_chart @data.cloud_cover_chart_data,{library: {title: "Cloud Cover", vAxis: {title: "Percent", viewWindow: {max: 100, min: 0}}}.merge(lib_vals)} %>
 
 

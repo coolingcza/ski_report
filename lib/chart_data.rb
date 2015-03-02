@@ -1,5 +1,4 @@
 
-
 class ChartData
   
   attr_reader :name, :data
@@ -14,4 +13,3 @@ class ChartData
   end
   
 end
-    

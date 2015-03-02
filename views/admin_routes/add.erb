@@ -1,0 +1,22 @@
+<% if @newresort %>
+
+<h3>Added:</h3>
+<table>
+  <tr>
+    <td><b>Resort Name</b></td>
+    <td><b>Latitude</b></td>
+    <td><b>Longitude</b></td>
+    <td><b>State</b></td>
+  </tr>
+  <tr>
+    <td><%= @newresort.name %></td> 
+    <td><%= @newresort.latitude %></td> 
+    <td><%= @newresort.longitude %></td> 
+    <td><%= @newresort.state %></td>
+  </tr>
+</table>
+
+<% else %>
+<h3>Resort of that name already exists. Please check resort list.</h3>
+
+<% end %>

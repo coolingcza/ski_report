@@ -6,13 +6,105 @@
     <title>Powder Report</title>
     <script src="http://www.google.com/jsapi"></script>
     <script src="chartkick.js"></script>
+    
+    <style type="text/css" media="screen">
+      body{
+        width: 100%;
+        font-family: Times;
+        margin: 0;
+        padding: 0;
+      }
+
+      header{
+        height: 115px;
+        background-image: url('images/snowypines-1.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        width: 100%;
+      }
+      
+      header h1{
+        padding-top: 42px;
+        padding-left: 10px;
+      }
+      
+      h2{
+        text-align: center;
+      }
+      
+      #sign_in form{
+        width: 145px;
+        margin: 0 auto;
+        margin-top: 20px;
+      }
+      
+      #sign_in form input{
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+      
+      #resort_legend table{
+        margin: 45px auto 25px auto;
+      }
+      
+/*      .change_buttons button{
+        margin: 10px;
+      }*/
+      
+      .change_buttons form{
+        display: inline;
+      }
+      
+      .change_buttons{
+        width: 230px;
+        margin: 30px auto 30px auto;
+      }
+      
+      button{
+        height: 30px;
+        border-radius: 3px;
+        background-color: #E0E0E0;
+        border: 1px solid white;
+        margin: 10px;
+      }
+      
+      button:hover{
+        border: 1px solid #C0C0C0;
+      }
+      
+      .map_legend{
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      
+      .map_legend table{
+        width: 140px;
+        display: inline-block;
+      }
+      
+      .map_row{
+        height: 200px;
+        overflow: scroll;
+      }
+      
+      .map_row_title{
+        text-align: center;
+        display: block;
+        margin-top: 50px;
+      }
+      
+      .select_resorts{
+        margin-left: 30px;
+        margin-bottom: 30px;
+      }
+      
+      </style>
   </head>
 
   <body>
     
-    <header style="height: 115px; background-image: url('images/snowypines-1.jpg'); background-position: right; background-repeat: no-repeat;">
-
-      <h1 style="padding-top: 42px; padding-left: 10px">Powder Forecast</h1>
+    <header>
+      <h1>Powder Forecast</h1>
     </header>
 
     <%= yield %>

@@ -14,8 +14,9 @@ require_relative "models/resort"
 require_relative "models/marker"
 require_relative "lib/map_string"
 require_relative "lib/chart_data"
-require_relative "controllers/admin"
-require_relative "controllers/user"
+require_relative "lib/wx_data"
+require_relative "controllers/admin_routes"
+require_relative "controllers/user_routes"
 
 
 

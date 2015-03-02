@@ -16,8 +16,7 @@ class Marker
   extend DatabaseClassMethods
   include DatabaseInstanceMethods
   
-  attr_reader :id, :condition
-  attr_accessor :description
+  attr_reader :id, :description
   
   # Public: .where_name
   # Gets a list of users with the given name.

@@ -77,5 +77,8 @@ class Resort
     @table     = "resorts"
   end
   
+  def delete_resort_users
+    DATABASE.execute("DELETE FROM users_resorts WHERE resort_id = #{@id}")
+  end
   
 end

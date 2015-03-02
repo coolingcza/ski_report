@@ -1,19 +1,23 @@
-<h2><%= @var_text %></h2>
 
+
+<h2>Resort Selection</h2>
+
+<div class="select_resorts">
+
+<% if @surfeit_text %>
+  <h3><%= @surfeit_text %></h3>
+<% end %>
 
 <h3>Select State:</h3>
 
-<form action="<%= @path %>" method="get">
+<form action="/set_state" method="post">
     <select name="state">
     <% @state_list.each do |s| %>
       <option value= <%= s %> > <%= s %> </option>
     <% end %>
     </select>
-    <input type="hidden" name="username" value="<%= @username %>">
     <% if params["surfeit"] %>
       <input type="hidden" name="surfeit" value="yes">
-    <% elsif params["dearth"] %>
-      <input type="hidden" name="dearth" value="yes">
     <% end %>
     <input type="submit" value="Submit">
 </form>
@@ -22,24 +26,21 @@
 
   <h3 style>Select up to six resorts of interest:</h3>
 
-  <form action="/display" method="get">
+  <form action="/change_resorts" method="post">
 
   <% @resort_list.each do |r| %>
     <input type="checkbox" name="<%= r.id %>" value = "r_id"><%=r.name %><br />
     <% end %>
-  
-    <input type="hidden" name="username" value=<%= params["username"] %>>
-    <input type="hidden" name="state" value=<%= params["state"] %>>
       <br>
-      <input type="submit" value="Submit">
+      <button type="submit">Submit</button>
       <br>
     </form>
   
-    <hr>
-    
-  <form action="/" method="get">
-    <input type="submit" value="Enter a different user name">
+<% end %>
+
+
+  <form action="/">
+    <button type="submit">Change User</button>
   </form>
   
-<% end %>
-  
+</div>

@@ -28,7 +28,6 @@ class User
   
   def self.where_name(x)
     results = DATABASE.execute("SELECT * FROM users WHERE name = '#{x}'")
-
     results_as_objects = []
 
     results.each do |r|
@@ -59,12 +58,11 @@ class User
   # user_id   - Number: ID associated with user record in users table.
   # resort_id - Number: ID associated with resort record in resorts table.
   #
-  # Returns: none.
+  # Returns: empty array?
   
-  def insert_user_resort(resort_id)
-      
-    DATABASE.execute("INSERT INTO users_resorts (user_id, resort_id) VALUES (#{@id}, #{resort_id})")
-    
+  def insert_user_resort(resort_id)  
+    DATABASE.execute("INSERT INTO users_resorts (user_id, resort_id) 
+                      VALUES (#{@id}, #{resort_id})")
   end
   
   # Public: get_user_resorts
@@ -76,7 +74,8 @@ class User
   # Returns: Array of hashes containing bridge table records.
   
   def get_user_resorts
-    DATABASE.execute("SELECT resort_id FROM users_resorts WHERE user_id = #{@id}")
+    DATABASE.execute("SELECT resort_id FROM users_resorts 
+                      WHERE user_id = #{@id}")
   end
   
   # Public: delete_user_resorts
@@ -85,7 +84,7 @@ class User
   # Parameters:
   # user_id - Number: ID associated with user record in users table.
   #
-  # Returns: none.
+  # Returns: empty array?
   
   def delete_user_resorts
     DATABASE.execute("DELETE FROM users_resorts WHERE user_id = #{@id}")

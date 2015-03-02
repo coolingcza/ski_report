@@ -139,7 +139,7 @@ module DatabaseInstanceMethods
    # none
    #
    # Returns: 
-   # none.
+   # Array containing Hash of data for saved record.
    #
    # State changes:
    # Row values in the database are updated.
@@ -147,9 +147,7 @@ module DatabaseInstanceMethods
   def save
     attributes = []
     
-    # Example  [:@name, :@age, :@hometown]
     instance_variables.each do |i|
-      # Example  :@name
       attributes << i.to_s.delete("@") if i != :@table
     end
     
@@ -178,7 +176,7 @@ module DatabaseInstanceMethods
    # none
    #
    # Returns: 
-   # none.
+   # empty array?
    #
    # State changes:
    # Row is removed from the database.
