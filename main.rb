@@ -8,6 +8,9 @@ require "sqlite3"
 require "sinatra"
 require "chartkick"
 
+# could replace require gem statements with:
+# Bundler.require(:default)
+
 DATABASE = SQLite3::Database.new('database/powder_report.db')
 
 require_relative "database/database_setup"
