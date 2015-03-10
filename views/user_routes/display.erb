@@ -1,27 +1,23 @@
 <div class="change_buttons">
-<form action="/select_resorts" method="get">
-  <button type="submit">Change Resorts</button>
-</form>
-<form action="/" method="get">
-  <button type="submit">Change User</button>
-</form>
+  <form action="/select_resorts" method="get">
+    <button type="submit">Change Resorts</button>
+  </form>
+  <form action="/" method="get">
+    <button type="submit">Change User</button>
+  </form>
 </div>
 
 <div id="resort_legend">
-<table>
-  <col width="200">
-  <col width="30">
-<% @resorts.each do |r| %>
-  <tr>
-    <td>
-      <%= r.name %>
-    </td>
-    <td align="center">
-      <b><%= r.name[0..0] %></b>
-    </td>
-  </tr>
-<% end %>
-</table>
+  <table>
+    <col width="200">
+    <col width="30">
+    <% @resorts.each do |r| %>
+      <tr>
+        <td><%= r.name %></td>
+        <td align="center"><b><%= r.name[0..0] %></b></td>
+      </tr>
+  <% end %>
+  </table>
 </div>
 
 <!-- Scroll table: -->

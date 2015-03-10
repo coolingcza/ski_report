@@ -83,7 +83,7 @@ before "/display" do
     forecast = ForecastIO.forecast(resort.latitude, resort.longitude, \
               options = {params: {exclude: 'currently,minutely,flags,alerts'}})
 
-    @data.build_map_strings(forecast["daily"]["data"],resort)
+    @data.build_marker_strings(forecast["daily"]["data"],resort)
     @data.build_chart_series(forecast["hourly"]["data"],resort)
     
   end

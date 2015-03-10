@@ -1,7 +1,10 @@
+require 'rubygems'
+require 'bundler/setup'
+
 require "forecast_io"
 require "faraday"
 require "pry"
-require "SQLite3"
+require "sqlite3"
 require "sinatra"
 require "chartkick"
 
