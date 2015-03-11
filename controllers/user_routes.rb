@@ -9,26 +9,23 @@ post "/user_sign_in" do
   session[:username] = params["username"]
   
   if User.exists?({name: session[:username]})
-    user = User.find_by name: session[:username] #[0]
+    user = User.find_by_name session[:username] #[0]
     session[:user_id] = user.id
   else
-    user = User.new({"name"=>session[:username]})
-    user.insert
+    user = User.create({"name"=>session[:username]})
     session[:user_id] = user.id
   end
   
-  if user.has_resorts?
-    redirect to("/display")
-  else
+  if user.resorts.empty?
     redirect to("/select_resorts")
+  else
+    redirect to("/display")
   end
 end
 
 
 get "/select_resorts" do
-  @state_list = []
-  Resort.get_states.each { |a| @state_list << a["state"] }
-
+  @state_list = Resort.get_states.map { |a| a.state }
   @state = session[:state]
   
   if params["surfeit"] 
@@ -36,7 +33,7 @@ get "/select_resorts" do
   end
   
   if @state
-    @resort_list = Resort.where_attr("resorts","state",@state)
+    @resort_list = Resort.where("state = ?", @state)
   end
   
   erb :"user_routes/select_resorts", :layout => :boilerplate
@@ -57,12 +54,11 @@ post "/change_resorts" do
     redirect to("/select_resorts")
   else
     # delete existing user resorts
-    user = User.find("users",session[:user_id])
-    user.delete_user_resorts
+    user = User.find(session[:user_id])
+    user.resorts.clear
     # add new user resorts
     params.each do |r,n|
-      resort = Resort.find("resorts",r)
-      user.insert_user_resort(resort.id)
+      user.resorts << Resort.find(r)
     end
     redirect to("/display")
   end
@@ -70,28 +66,25 @@ end
 
 
 before "/display" do
-  @user = User.find("users",session[:user_id])
-  @user_resorts = @user.get_user_resorts
+  @user = User.find(session[:user_id])
+  @user_resorts = @user.resorts
   
   @data = WxData.new()
-  @resorts = []
   
   @user_resorts.each do |r|
-    resort = Resort.find("resorts",r["resort_id"])
-    @resorts << resort
-
-    forecast = ForecastIO.forecast(resort.latitude, resort.longitude, \
+    
+    forecast = ForecastIO.forecast(r.latitude, r.longitude, \
               options = {params: {exclude: 'currently,minutely,flags,alerts'}})
 
-    @data.build_marker_strings(forecast["daily"]["data"],resort)
-    @data.build_chart_series(forecast["hourly"]["data"],resort)
+    @data.build_marker_strings(forecast["daily"]["data"],r)
+    @data.build_chart_series(forecast["hourly"]["data"],r)
     
   end
   
   @data.generate_map_urls
   
   #fill marker list for legends
-  @markers = Marker.all("markers")
+  @markers = Marker.all
   
 end
 

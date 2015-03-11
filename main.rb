@@ -31,14 +31,3 @@ require_relative "controllers/user_routes"
 
 
 ForecastIO.api_key = '1e01b6795e84c5bade0cddcf3772380c'
-
-
-
-
-
-
-
-
-
-
-

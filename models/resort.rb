@@ -10,32 +10,11 @@
 # @table    - String: "resorts" - name of associated table
 # 
 # Public Methods:
-# #where_name
+# .get_states
 
 class Resort < ActiveRecord::Base
   
   has_and_belongs_to_many :users, join_table: :users_resorts
-
-  
-  # Public: .where_name
-  # Get a list of resorts with the given name.
-  #
-  # Parameters:
-  # x - String: The name to search for.
-  #
-  # Returns: Array that contains objects for matching resort records.
-  
-  def self.where_name(x)
-    results = DATABASE.execute("SELECT * FROM resorts WHERE name = '#{x}'")
-
-    results_as_objects = []
-
-    results.each do |r|
-      results_as_objects << self.new(r)
-    end
-
-    results_as_objects
-  end
   
   # Public: .get_states
   # Returns the unique values from states field in resorts table.
@@ -43,27 +22,10 @@ class Resort < ActiveRecord::Base
   # Parameters:
   # none.
   #
-  # Returns: Array of hashes {"state" => unique record}.
+  # Returns: Array of hashes {"state" => unique record}. <-probably out of date
   
   def self.get_states
-    #results = DATABASE.execute("SELECT DISTINCT state FROM resorts")
-    results = self.select(:state).distinct
-  end
-  
-  # Public: #delete_resort_users
-  # Removes records from users_resorts join table.
-  #
-  # Parameters:
-  # none
-  #
-  # Returns:
-  # empty array
-  #
-  # State Changes:
-  # Join table modified.
-  
-  def delete_resort_users
-    users.delete
+    results = self.select("distinct state")
   end
   
 end

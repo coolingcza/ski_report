@@ -1,10 +1,7 @@
 get "/admin" do
-  #binding.pry
-  @state_list = []
-  Resort.get_states.each { |a| @state_list << a["state"] }
-  
-  @resorts = Resort.all#("resorts")
-  @user_list = User.all#("users")
+  @state_list = Resort.get_states.map { |a| a["state"] }
+  @resorts = Resort.all #("resorts")
+  @user_list = User.all #("users")
   @change = true if session[:admin_change]
   
   if @change
@@ -43,29 +40,13 @@ end
 post "/admin/add_resort" do
   if Resort.where({"name" => params["addresortname"]}).length == 0
     
-  #if Resort.where_name(params["addresortname"]).length == 0
-    
-    newresort = Resort.new ({
+    newresort = Resort.create ({
       "name" => params["addresortname"],
       "latitude" => params["latitude"].to_f,
       "longitude" => params["longitude"].to_f,
       "state" => params["state"]
     })
     
-    # newresort = Resort.new do |r|
-    #   r.name = params["addresortname"]
-    #   r.latitude = params["latitude"].to_f
-    #   r.longitude = params["longitude"].to_f
-    #   r.state = params["state"]
-    # end
-    
-    # user = User.new do |u|
-    #   u.name = "David"
-    #   u.occupation = "Code Artist"
-    # end
-    
-    binding.pry
-    newresort.save
     session[:admin_change] = {"newresort" => newresort.id}
     redirect to("/admin")
   else
@@ -74,16 +55,15 @@ post "/admin/add_resort" do
 end
 
 post "/admin/remove_resort" do
-  # delresort = Resort.find("resorts",params["delresortid"])
   delresort = Resort.find(params["delresortid"])
   delresort.delete
-  delresort.delete_resort_users
+  delresort.users.clear
   session[:admin_change] = {"delresort" => delresort.name}
   redirect to("/admin")
 end
 
 post "/admin/update_resort" do
-  updresort = Resort.find("resorts",params["updresortid"])
+  updresort = Resort.find(params["updresortid"])
   old_name = updresort.name
   updresort.name = params["newresortname"]
   updresort.save
