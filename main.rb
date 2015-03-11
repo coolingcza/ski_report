@@ -11,6 +11,10 @@ require "chartkick"
 # could replace require gem statements with:
 # Bundler.require(:default)
 
+require "sinatra/activerecord"
+
+set :database, {adapter: "sqlite3", database: "database/powder_report.db"}
+
 DATABASE = SQLite3::Database.new('database/powder_report.db')
 
 require_relative "database/database_setup"

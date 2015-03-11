@@ -1,6 +1,19 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    activemodel (3.2.21)
+      activesupport (= 3.2.21)
+      builder (~> 3.0.0)
+    activerecord (3.2.21)
+      activemodel (= 3.2.21)
+      activesupport (= 3.2.21)
+      arel (~> 3.0.2)
+      tzinfo (~> 0.3.29)
+    activesupport (3.2.21)
+      i18n (~> 0.6, >= 0.6.4)
+      multi_json (~> 1.0)
+    arel (3.0.3)
+    builder (3.0.4)
     chartkick (1.3.2)
     coderay (1.1.0)
     faraday (0.9.1)
@@ -10,6 +23,7 @@ GEM
       hashie
       multi_json
     hashie (3.4.0)
+    i18n (0.7.0)
     method_source (0.8.2)
     multi_json (1.11.0)
     multipart-post (2.0.0)
@@ -24,9 +38,13 @@ GEM
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (~> 1.3, >= 1.3.4)
+    sinatra-activerecord (2.0.5)
+      activerecord (>= 3.2)
+      sinatra (~> 1.0)
     slop (3.6.0)
     sqlite3 (1.3.10)
     tilt (1.4.1)
+    tzinfo (0.3.42)
 
 PLATFORMS
   ruby
@@ -37,4 +55,5 @@ DEPENDENCIES
   forecast_io
   pry
   sinatra
+  sinatra-activerecord
   sqlite3

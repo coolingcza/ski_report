@@ -12,13 +12,10 @@
 # Public Methods:
 # #where_name
 
-class Resort
+class Resort < ActiveRecord::Base
   
-  extend DatabaseClassMethods
-  include DatabaseInstanceMethods
-  
-  attr_reader :id, :latitude, :longitude, :state, :table
-  attr_accessor :name
+  has_and_belongs_to_many :users, join_table: :users_resorts
+
   
   # Public: .where_name
   # Get a list of resorts with the given name.
@@ -49,36 +46,24 @@ class Resort
   # Returns: Array of hashes {"state" => unique record}.
   
   def self.get_states
-    results = DATABASE.execute("SELECT DISTINCT state FROM resorts")
+    #results = DATABASE.execute("SELECT DISTINCT state FROM resorts")
+    results = self.select(:state).distinct
   end
   
-  # Public: #initialize
-  # Creates Resort object.
+  # Public: #delete_resort_users
+  # Removes records from users_resorts join table.
   #
   # Parameters:
-  # @name     - String: contains resort name.
-  # @id       - Number: derived from resorts table primary key.
-  # @location - String: latitude,longitude
-  # @state    - String: state in which resort is located
-  # @table    - String: "resorts" - name of associated table
+  # none
   #
   # Returns:
-  # Resort object.
+  # empty array
   #
   # State Changes:
-  # New object created.
-  
-  def initialize(options)
-    @name      = options["name"]
-    @id        = options["id"]
-    @latitude  = options["latitude"]
-    @longitude = options["longitude"]
-    @state     = options["state"]
-    @table     = "resorts"
-  end
+  # Join table modified.
   
   def delete_resort_users
-    DATABASE.execute("DELETE FROM users_resorts WHERE resort_id = #{@id}")
+    users.delete
   end
   
 end

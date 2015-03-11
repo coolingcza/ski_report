@@ -10,13 +10,15 @@
 # Public Methods:
 # #where_name
 
-class User
+class User < ActiveRecord::Base
   
-  extend DatabaseClassMethods
-  include DatabaseInstanceMethods
+  has_and_belongs_to_many :resorts, join_table: :users_resorts
   
-  attr_reader :id, :table
-  attr_accessor :name
+  # extend DatabaseClassMethods
+  # include DatabaseInstanceMethods
+  #
+  # attr_reader :id, :table
+  # attr_accessor :name
   
   # Public: .where_name
   # Gets a list of users with the given name.
@@ -26,28 +28,30 @@ class User
   #
   # Returns: Array containing objects for matching user records.
   
-  def self.where_name(x)
-    results = DATABASE.execute("SELECT * FROM users WHERE name = '#{x}'")
-    results_as_objects = []
-
-    results.each do |r|
-      results_as_objects << self.new(r)
-    end
-
-    results_as_objects
-  end
+  # def self.where_name(x)
+  #   # results = DATABASE.execute("SELECT * FROM users WHERE name = '#{x}'")
+  #   # results_as_objects = []
+  #   #
+  #   # results.each do |r|
+  #   #   results_as_objects << self.new(r)
+  #   # end
+  #   #
+  #   # results_as_objects
+  #   # find_by name: x
+  #   #Client.find_by first_name: 'Lifo'
+  # end
   
   
-  def self.exists?(name)
-    true if User.where_name(name).length > 0
-  end
+  # def self.exists?(name)
+  #   true if User.find_by name: name
+  # end
   
   
-  def initialize(options)
-    @id      = options["id"]
-    @name    = options["name"]
-    @table   = "users"
-  end
+  # def initialize(options)
+  #   @id      = options["id"]
+  #   @name    = options["name"]
+  #   @table   = "users"
+  # end
   
 
   

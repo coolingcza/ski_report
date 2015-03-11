@@ -8,8 +8,8 @@ end
 post "/user_sign_in" do
   session[:username] = params["username"]
   
-  if User.exists?(session[:username])
-    user = User.where_name(session[:username])[0]
+  if User.exists?({name: session[:username]})
+    user = User.find_by name: session[:username] #[0]
     session[:user_id] = user.id
   else
     user = User.new({"name"=>session[:username]})
