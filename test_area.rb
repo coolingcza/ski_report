@@ -1,41 +1,17 @@
-require "forecast_io"
-require "faraday"
+require "sqlite3"
 require "pry"
+require "sinatra"
+require "sinatra/activerecord"
+require "bcrypt"
 
-require_relative "lib/wx_data"
-require_relative "lib/map_string"
+require_relative "models/user"
 
+set :database, {adapter: "sqlite3", database: "database/powder_report.db"}
 
-#test area to establish access functionality for Forecast_IO API
+user = User.find(1)
 
-# ForecastIO.api_key = '1e01b6795e84c5bade0cddcf3772380c'
-#
-#
-#
-# lat = 39.680273
-# lon = -105.895918
-#
-# forecast = ForecastIO.forecast(lat, lon, options = {params: {exclude: 'currently,minutely,flags,alerts' }} )
-#
-# daily = forecast["daily"]["data"]
-#
-# hourly = forecast["hourly"]["data"]
-
-
-# time = []
-# precip = []
-# daily.each do |d|
-#   precip << d.precipAccumulation
-#   time << Time.at(d.time)
-# end
-
-test = WxData.new()
+password = "fluffy"
+#pass_hash = Password.new(password)
+pass_hash = BCrypt::Password.create(password)
 
 binding.pry
-
-# require "sinatra"
-#
-# get "/" do
-#   erb :welcome, :layout => :boilerplate
-# end
-

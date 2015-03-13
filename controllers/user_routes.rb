@@ -1,19 +1,38 @@
 enable :sessions
 
+before do
+  unless session[:user_id]
+    redirect to("/")
+  end
+end
+
 get "/" do
+  if params["invalid_password"]
+    @message = "Invalid Password, please try again:"
+  elsif params["invalid_username"]
+    @message = "Invalid Username, please try again:"
+  end
   erb :"user_routes/welcome", :layout => :boilerplate
 end
 
 
 post "/user_sign_in" do
-  session[:username] = params["username"]
   
-  if User.exists?({name: session[:username]})
-    user = User.find_by_name session[:username] #[0]
-    session[:user_id] = user.id
+  if User.exists?({name: params["username"]})
+    user = User.find_by_name params["username"]
+    #check password:
+    if BCrypt::Password.new(user.password) == params["password"]
+      session[:user_id] = user.id
+    else
+      redirect to("/?invalid_password=true")
+    end
   else
-    user = User.create({"name"=>session[:username]})
-    session[:user_id] = user.id
+    if params["username"] != ""
+      user = User.create({name: params["username"], password: params["password"]})
+      session[:user_id] = user.id
+    else
+      redirect to("/?invalid_username=true")
+    end
   end
   
   if user.resorts.empty?

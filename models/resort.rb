@@ -3,11 +3,11 @@
 # Models a ski resort.
 #
 # Attributes:
-# @name     - String: resort name.
-# @id       - Number: derived from resorts table primary key.
-# @location - String: latitude,longitude
-# @state    - String: state in which resort is located
-# @table    - String: "resorts" - name of associated table
+# @name      - String: resort name.
+# @id        - Number: derived from resorts table primary key.
+# @latitude  - Number: latitude of resort location
+# @longitude - String: longitude of resort location
+# @state     - String: state in which resort is located
 # 
 # Public Methods:
 # .get_states
@@ -15,6 +15,10 @@
 class Resort < ActiveRecord::Base
   
   has_and_belongs_to_many :users, join_table: :users_resorts
+  
+  validates :name, :latitude, :longitude, :state, presence: true
+  # validates :latitude, minimum: -90, maximum: 90
+  # validates :longitude, minimum: -180, maximum: 180
   
   # Public: .get_states
   # Returns the unique values from states field in resorts table.

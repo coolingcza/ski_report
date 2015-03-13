@@ -7,3 +7,5 @@ gem "sqlite3"
 gem "sinatra"
 gem "chartkick"
 gem "sinatra-activerecord"
+#gem 'bcrypt-ruby', '~> 3.1.5'
+gem 'bcrypt', '~> 3.1.10'
