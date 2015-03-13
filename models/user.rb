@@ -3,8 +3,9 @@
 # Models a user with relevant attributes.
 #
 # Attributes:
-# @name    - String: user's name.
-# @id      - Number: primary key in users table.
+# @name     - String: user's name.
+# @id       - Number: primary key in users table.
+# @password - String: BCrypt result of user's password
 
 class User < ActiveRecord::Base
   

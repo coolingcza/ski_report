@@ -17,8 +17,8 @@ class Resort < ActiveRecord::Base
   has_and_belongs_to_many :users, join_table: :users_resorts
   
   validates :name, :latitude, :longitude, :state, presence: true
-  # validates :latitude, minimum: -90, maximum: 90
-  # validates :longitude, minimum: -180, maximum: 180
+  validates :latitude, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
+  validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
   
   # Public: .get_states
   # Returns the unique values from states field in resorts table.

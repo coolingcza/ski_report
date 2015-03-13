@@ -28,7 +28,7 @@ post "/user_sign_in" do
     end
   else
     if params["username"] != ""
-      user = User.create({name: params["username"], password: params["password"]})
+      user = User.create({name: params["username"], password: BCrypt::Password.create(params["password"])})
       session[:user_id] = user.id
     else
       redirect to("/?invalid_username=true")
@@ -91,9 +91,9 @@ before "/display" do
   @data = WxData.new()
   
   @user_resorts.each do |r|
+    binding.pry
     
-    forecast = ForecastIO.forecast(r.latitude, r.longitude, \
-              options = {params: {exclude: 'currently,minutely,flags,alerts'}})
+    forecast = ForecastIO.forecast(r.latitude, r.longitude, options = {params: {exclude: 'currently,minutely,flags,alerts'}})
 
     @data.build_marker_strings(forecast["daily"]["data"],r)
     @data.build_chart_series(forecast["hourly"]["data"],r)

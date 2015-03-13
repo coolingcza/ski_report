@@ -17,6 +17,8 @@
 
 class MapString
   
+  include Marker
+  
   attr_accessor :marker_strings
   attr_reader :url
   
@@ -39,7 +41,8 @@ class MapString
 
   def add_type_marker(dpreciptype,resort)
     #eg: color:0xFFFF00%7Clabel:B%7C62.107733,-145.541936
-    color = Marker.get_pcp_type_description(dpreciptype)
+    color = get_pcp_type_description(dpreciptype)
+    #color = Marker.get_pcp_type_description(dpreciptype)
     @marker_strings << "color:0x" + color + label_and_location(resort)
   end
   
@@ -57,7 +60,8 @@ class MapString
   # Adds string to @marker_strings.
   
   def add_prob_marker(dprecipprob,resort)
-    color = Marker.get_pcp_prob_description(dprecipprob)
+    color = get_pcp_prob_description(dprecipprob)
+    #color = Marker.get_pcp_prob_description(dprecipprob)
     @marker_strings << "color:0x" + color + label_and_location(resort)
   end
   
@@ -75,7 +79,8 @@ class MapString
   # Adds string to @marker_strings.
   
   def add_accum_marker(dprecipaccum,resort)
-    color = Marker.get_pcp_accum_description(dprecipaccum)
+    color = get_pcp_accum_description(dprecipaccum)
+    #color = Marker.get_pcp_accum_description(dprecipaccum)
     @marker_strings << "color:0x" + color + label_and_location(resort)
   end
   

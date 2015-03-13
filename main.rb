@@ -1,22 +1,10 @@
 require 'rubygems'
 require 'bundler/setup'
 
-# require "forecast_io"
-# require "faraday"
-# require "pry"
-# require "sqlite3"
-# require "sinatra"
-# require "chartkick"
-# require "sinatra/activerecord"
-# require "bcrypt"
-
-# could replace require gem statements with: 
+# replaced require gem statements with: 
 Bundler.require(:default)
 
-
 set :database, {adapter: "sqlite3", database: "database/powder_report.db"}
-
-DATABASE = SQLite3::Database.new('database/powder_report.db')
 
 require_relative "database/database_setup"
 require_relative "database/database_methods"
