@@ -27,12 +27,19 @@ post "/user_sign_in" do
       redirect to("/?invalid_password=true")
     end
   else
-    if params["username"] != ""
-      user = User.create({name: params["username"], password: BCrypt::Password.create(params["password"])})
-      session[:user_id] = user.id
+    user = User.new({name: params["username"], password: params["password"]})
+    if user
+      user.password = BCrypt::Password.create(user.password)
+      user.save
     else
-      redirect to("/?invalid_username=true")
+      redirect to("/")
     end
+    # if params["username"] != ""
+    #   user = User.create({name: params["username"], password: BCrypt::Password.create(params["password"])})
+    #   session[:user_id] = user.id
+    # else
+    #   redirect to("/?invalid_username=true")
+    # end
   end
   
   if user.resorts.empty?
@@ -91,7 +98,6 @@ before "/display" do
   @data = WxData.new()
   
   @user_resorts.each do |r|
-    binding.pry
     
     forecast = ForecastIO.forecast(r.latitude, r.longitude, options = {params: {exclude: 'currently,minutely,flags,alerts'}})
 
@@ -103,7 +109,7 @@ before "/display" do
   @data.generate_map_urls
   
   #fill marker list for legends
-  @markers = Marker.all
+  #@markers = Marker.all
   
 end
 
