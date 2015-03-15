@@ -1,5 +1,5 @@
 configure :development do
- set :database, {adapter: "sqlite3", database: "powder_report.db"}
+ set :database, {adapter: "sqlite3", database: "./database/powder_report.db"}
 end
 
 configure :production do
@@ -14,9 +14,9 @@ configure :production do
  )
 end
 
-DATABASE = SQLite3::Database.new('database/powder_report.db')
-
-DATABASE.results_as_hash = true
+# DATABASE = SQLite3::Database.new('database/powder_report.db')
+#
+# DATABASE.results_as_hash = true
 
 # DATABASE.execute("CREATE TABLE IF NOT EXISTS users
 #                   (id INTEGER PRIMARY KEY, name TEXT)")
