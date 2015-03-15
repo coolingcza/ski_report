@@ -14,7 +14,7 @@
 
 class Resort < ActiveRecord::Base
   
-  has_and_belongs_to_many :users, join_table: :users_resorts
+  has_and_belongs_to_many :users #, join_table: :users_resorts
   
   validates :name, :latitude, :longitude, :state, presence: true
   validates :latitude, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
