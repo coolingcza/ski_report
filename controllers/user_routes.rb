@@ -10,7 +10,7 @@ get "/" do
   if params["invalid_password"]
     @message = "Invalid Password, please try again:"
   elsif params["invalid_username"]
-    @message = "Invalid Username, please try again:"
+    @message = "Invalid username or password, please try again:"
   end
   erb :"user_routes/welcome", :layout => :boilerplate
 end
@@ -28,21 +28,14 @@ post "/user_sign_in" do
     end
   else
     user = User.new({name: params["username"], password: params["password"]})
-    binding.pry
-    if user
+    if user.valid?
       user.password = BCrypt::Password.create(user.password)
       user.save
       session[:user_id] = user.id
     else
       #add something to pass error message?
-      redirect to("/")
+      redirect to("/?invalid_username=true")
     end
-    # if params["username"] != ""
-    #   user = User.create({name: params["username"], password: BCrypt::Password.create(params["password"])})
-    #   session[:user_id] = user.id
-    # else
-    #   redirect to("/?invalid_username=true")
-    # end
   end
   
   if user.resorts.empty?
