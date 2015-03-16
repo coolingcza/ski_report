@@ -13,7 +13,13 @@ unless ActiveRecord::Base.connection.table_exists?(:resorts)
     t.text :state
   end
 end
-                                
+
+unless ActiveRecord::Base.connection.table_exists?(:users_resorts)
+  ActiveRecord::Base.connection.create_table :users_resorts do |t|
+    t.integer :user_id
+    t.integer :resort_id
+  end
+end                                
                   
 #seed database tables:
 

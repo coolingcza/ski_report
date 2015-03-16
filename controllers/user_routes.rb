@@ -32,6 +32,7 @@ post "/user_sign_in" do
       user.password = BCrypt::Password.create(user.password)
       user.save
     else
+      #add something to pass error message?
       redirect to("/")
     end
     # if params["username"] != ""
