@@ -28,6 +28,7 @@ post "/user_sign_in" do
     end
   else
     user = User.new({name: params["username"], password: params["password"]})
+    binding.pry
     if user
       user.password = BCrypt::Password.create(user.password)
       user.save
