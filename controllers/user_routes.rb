@@ -1,10 +1,10 @@
 enable :sessions
 
-# before do
-#   unless session[:user_id]
-#     redirect to("/")
-#   end
-# end
+before "/*" do
+  unless session[:user_id]
+    redirect to("/")
+  end
+end
 
 get "/" do
   if params["invalid_password"]
