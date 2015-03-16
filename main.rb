@@ -5,7 +5,7 @@ require 'bundler/setup'
 Bundler.require(:default)
 
 configure :development do
- set :database, {adapter: "sqlite3", database: "./database/powder_report.db"}
+ set :database, {adapter: "sqlite3", database: "database/powder_report.db"}
 end
 
 configure :production do
